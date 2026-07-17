@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>Clôture caisse — TRANCHÉ</title>
+<link rel="apple-touch-icon" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxODAgMTgwIiB3aWR0aD0iMTgwIiBoZWlnaHQ9IjE4MCI+CiAgPHJlY3Qgd2lkdGg9IjE4MCIgaGVpZ2h0PSIxODAiIHJ4PSIyMCIgZmlsbD0iIzhkM2U0OCIvPgogIDx0ZXh0IHg9IjkwIiB5PSIxMjUiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtZmFtaWx5PSJHZW9yZ2lhLCBzZXJpZiIgZm9udC1zaXplPSIxMTAiIGZvbnQtd2VpZ2h0PSJib2xkIiBmaWxsPSJ3aGl0ZSI+VDwvdGV4dD4KPC9zdmc+">
+<meta name="apple-mobile-web-app-title" content="Caisse TRANCHÉ">
+<meta name="theme-color" content="#8d3e48">
+<style>
+  :root {
+    --blue: #8d3e48;
+    --blue-light: #D6EAF8;
+    --purple: #6C3483;
+    --purple-light: #E8DAEF;
+    --green: #1E8449;
+    --green-light: #D5F5E3;
+    --red: #C0392B;
+    --red-light: #FADBD8;
+    --orange: #CA6F1E;
+    --orange-light: #FDEBD0;
+    --grey: #F4F6F7;
+    --border: #D5D8DC;
+    --text: #1C2833;
+    --muted: #717D7E;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #EAECEE; color: var(--text); min-height: 100vh; }
+
+  .app-bar { background: var(--blue); color: white; padding: 14px 16px; display: flex; align-items: center; gap: 12px; position: sticky; top: 0; z-index: 100; }
+  .app-bar .logo { width: 32px; height: 32px; background: rgba(255,255,255,0.2); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 14px; flex-shrink: 0; }
+  .app-bar .title { font-size: 16px; font-weight: 600; }
+  .app-bar .sub { font-size: 11px; opacity: 0.75; }
+
+  .content { max-width: 480px; margin: 0 auto; padding: 12px 12px 80px; }
+
+  .card { background: white; border-radius: 12px; margin-bottom: 12px; overflow: hidden; border: 1px solid var(--border); }
+  .card-header { padding: 12px 16px; display: flex; align-items: center; gap: 8px; border-bottom: 1px solid var(--border); }
+  .card-header .dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+  .card-header .dot-blue { background: #f8c1d5; }
+  .card-header .dot-purple { background: var(--purple); }
+  .card-header .dot-grey { background: var(--muted); }
+  .card-header span { font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: var(--muted); }
+  .card-body { padding: 14px 16px; }
+
+  .guide-tag { display: inline-flex; align-items: center; gap: 5px; background: #fdeef3; color: #8d3e48; font-size: 11px; font-weight: 500; padding: 3px 10px; border-radius: 999px; margin-bottom: 10px; }
+  .guide-tag.purple { background: #F4ECF7; color: #6C3483; }
+  .guide-tag svg { width: 12px; height: 12px; flex-shrink: 0; }
+
+  .field { margin-bottom: 14px; }
+  .field:last-child { margin-bottom: 0; }
+  .field label { display: block; font-size: 13px; font-weight: 500; color: var(--text); margin-bottom: 5px; }
+  .field .hint { font-size: 11px; color: var(--muted); margin-top: 4px; line-height: 1.4; }
+
+  input, select, textarea {
+    width: 100%; padding: 10px 12px; border: 1.5px solid var(--border);
+    border-radius: 8px; font-size: 16px; font-family: inherit; color: var(--text);
+    background: white; appearance: none; -webkit-appearance: none;
+    transition: border-color 0.15s;
+  }
+  input:focus, select:focus, textarea:focus { outline: none; border-color: var(--blue); }
+  input[type=number] { text-align: right; }
+  .input-wrap { position: relative; }
+  .input-wrap .prefix { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); font-size: 14px; color: var(--muted); pointer-events: none; }
+  .input-wrap input { padding-left: 28px; }
+
+  .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+
+  .divider { height: 1px; background: var(--border); margin: 14px 0; }
+
+  .fab { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); width: calc(100% - 24px); max-width: 456px; height: 52px; background: var(--blue); color: white; border: none; border-radius: 14px; font-size: 16px; font-weight: 600; font-family: inherit; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; z-index: 200; transition: background 0.15s, transform 0.1s; }
+  .fab:active { transform: translateX(-50%) scale(0.98); background: #6b2f37; }
+  .fab svg { width: 20px; height: 20px; }
+
+  /* États */
+  .screen { display: none; }
+  .screen.active { display: block; }
+
+  /* Écran succès */
+  .success-screen { min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 32px 20px; text-align: center; }
+  .success-icon { width: 72px; height: 72px; background: var(--green-light); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; }
+  .success-icon svg { width: 36px; height: 36px; color: var(--green); }
+  .success-title { font-size: 22px; font-weight: 700; color: var(--text); margin-bottom: 8px; }
+  .success-sub { font-size: 14px; color: var(--muted); margin-bottom: 32px; line-height: 1.5; }
+  .btn-new { background: white; border: 1.5px solid var(--border); border-radius: 12px; padding: 14px 28px; font-size: 15px; font-weight: 600; font-family: inherit; color: var(--text); cursor: pointer; }
+
+  /* Écran erreur */
+  .toast { position: fixed; bottom: 90px; left: 50%; transform: translateX(-50%); background: var(--red); color: white; padding: 12px 20px; border-radius: 10px; font-size: 14px; font-weight: 500; z-index: 300; opacity: 0; transition: opacity 0.2s; pointer-events: none; max-width: calc(100% - 24px); text-align: center; }
+  .toast.show { opacity: 1; }
+
+  /* Loading */
+  .fab.loading { background: #5D9EC9; pointer-events: none; }
+  .spinner { width: 20px; height: 20px; border: 2.5px solid rgba(255,255,255,0.4); border-top-color: white; border-radius: 50%; animation: spin 0.7s linear infinite; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  select { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23717D7E' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 12px center; padding-right: 32px; }
+</style>
+</head>
+<body>
+
+<div id="formScreen" class="screen active">
+  <div class="app-bar">
+    <div class="logo">T</div>
+    <div>
+      <div class="title">CLÔTURE CAISSE JOURNALIÈRE</div>
+      <div class="sub">— TRANCHÉ</div>
+    </div>
+  </div>
+
+  <div class="content">
+
+    <!-- Identification -->
+    <div class="card">
+      <div class="card-header"><div class="dot dot-grey"></div><span>Identification</span></div>
+      <div class="card-body">
+        <div class="field">
+          <label for="date">Date</label>
+          <input type="date" id="date">
+        </div>
+        <div class="row2">
+          <div class="field">
+            <label for="boutique">Boutique</label>
+            <select id="boutique">
+              <option value="">Choisir…</option>
+              <option>Rochechouart</option>
+              <option>Dames</option>
+              <option>Saint-Antoine</option>
+              <option>Asnières</option>
+              <option>Brochant</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="vendeur">Ton prénom</label>
+            <input type="text" id="vendeur" placeholder="Écris ton prénom" autocomplete="given-name" autocorrect="off">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Caisse principale -->
+    <div class="card" style="border-left:3px solid #f8c1d5">
+      <div class="card-header"><div class="dot dot-blue"></div><span>Caisse principale</span></div>
+      <div class="card-body">
+        <div class="guide-tag">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12" y2="18.01"/></svg>
+          Onglet "Fonds de caisse" — caisse principale
+        </div>
+        <div class="row2">
+          <div class="field">
+            <label for="p-fond-init">Fond de caisse initial</label>
+            <div class="input-wrap"><span class="prefix">€</span><input type="number" id="p-fond-init" placeholder="0.00" step="0.01" min="0" inputmode="decimal" pattern="[0-9.,]*"></div>
+          </div>
+          <div class="field">
+            <label for="p-fond-fin">Fond de caisse final</label>
+            <div class="input-wrap"><span class="prefix">€</span><input type="number" id="p-fond-fin" placeholder="0.00" step="0.01" min="0" inputmode="decimal" pattern="[0-9.,]*"></div>
+            <div class="hint">Espèces uniquement — monnayeur + tiroir caisse</div>
+          </div>
+        </div>
+        <div class="row2">
+          <div class="field">
+            <label for="p-apport">Apport espèces <span style="font-weight:400;font-size:11px;color:var(--muted)">(optionnel)</span></label>
+            <div class="input-wrap"><span class="prefix">€</span><input type="number" id="p-apport" placeholder="0.00" step="0.01" min="0" inputmode="decimal" pattern="[0-9.,]*"></div>
+            <div class="hint">Lu sur l'écran</div>
+          </div>
+          <div class="field">
+            <label for="p-retrait">Retrait espèces <span style="font-weight:400;font-size:11px;color:var(--muted)">(optionnel)</span></label>
+            <div class="input-wrap"><span class="prefix">€</span><input type="number" id="p-retrait" placeholder="0.00" step="0.01" min="0" inputmode="decimal" pattern="[0-9.,]*"></div>
+            <div class="hint">Lu sur l'écran</div>
+          </div>
+        </div>
+        <div class="divider"></div>
+        <div class="guide-tag" style="background:#E9F7EF;color:#1E8449;font-weight:600;">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:13px;height:13px"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+          Ouvrir l'onglet "Rapports" sur la caisse principale
+        </div>
+        <div class="guide-tag">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12" y2="18.01"/></svg>
+          Rapports → colonne "Espèce"
+        </div>
+        <div class="field" style="margin-top:10px">
+          <label for="cash"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" style="width:16px;height:16px;vertical-align:middle;margin-right:4px"><circle cx="10" cy="10" r="8"/><text x="10" y="14" text-anchor="middle" font-size="10" fill="currentColor" stroke="none" font-family="Arial">€</text></svg> Espèces</label>
+          <div class="input-wrap"><span class="prefix">€</span><input type="number" id="cash" placeholder="0.00" step="0.01" min="0" inputmode="decimal" pattern="[0-9.,]*"></div>
+        </div>
+        <div class="divider"></div>
+        <div class="guide-tag">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12" y2="18.01"/></svg>
+          Rapports → colonne "Carte bancaire"
+        </div>
+        <div class="field" style="margin-top:10px">
+          <label for="cb-total"><svg viewBox="0 0 20 14" fill="none" stroke="currentColor" stroke-width="1.5" style="width:18px;height:13px;vertical-align:middle;margin-right:4px"><rect x="1" y="1" width="18" height="12" rx="2"/><line x1="1" y1="5" x2="19" y2="5" stroke-width="2"/><rect x="3" y="8" width="4" height="2" rx="0.5" fill="currentColor" stroke="none"/></svg> Carte bancaire</label>
+          <div class="input-wrap"><span class="prefix">€</span><input type="number" id="cb-total" placeholder="0.00" step="0.01" min="0" inputmode="decimal" pattern="[0-9.,]*"></div>
+          <div class="hint">Colonne "Carte bancaire"</div>
+        </div>
+        <div class="divider"></div>
+        <div class="guide-tag">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2h12l2 4H4L6 2z"/><rect x="3" y="6" width="18" height="16" rx="2"/></svg>
+          Ticket télécollectes TPE fixe
+        </div>
+        <div class="field" style="margin-top:10px">
+          <label for="tpe1">Télécollectes TPE fixe</label>
+          <div class="input-wrap"><span class="prefix">€</span><input type="number" id="tpe1" placeholder="0.00" step="0.01" min="0" inputmode="decimal" pattern="[0-9.,]*"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Caisse appoint -->
+    <div class="card">
+      <div class="card-header"><div class="dot dot-purple"></div><span>Caisse d'appoint</span></div>
+      <div class="card-body">
+        
+        <div class="guide-tag purple" style="background:#EDE7F6;color:#6C3483;font-weight:600;">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:13px;height:13px"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+          Ouvrir l'onglet "Rapports" sur la caisse appoint
+        </div>
+        <div class="guide-tag purple">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12" y2="18.01"/></svg>
+          Rapports → colonne "E-Wallet"
+        </div>
+        <div class="field" style="margin-top:10px">
+          <label for="ewallet"><svg viewBox="0 0 20 14" fill="none" stroke="currentColor" stroke-width="1.5" style="width:18px;height:13px;vertical-align:middle;margin-right:4px"><rect x="1" y="1" width="18" height="12" rx="2"/><circle cx="10" cy="7" r="0.8" fill="currentColor" stroke="none"/><path d="M7 9.5 Q10 6.5 13 9.5" stroke-width="1.3" stroke-linecap="round" fill="none"/><path d="M5 11.5 Q10 5.5 15 11.5" stroke-width="1.3" stroke-linecap="round" fill="none"/></svg> E-Wallet <span style="font-weight:400;font-size:11px;color:var(--muted)">(optionnel)</span></label>
+          <div class="input-wrap"><span class="prefix">€</span><input type="number" id="ewallet" placeholder="0.00" step="0.01" min="0" inputmode="decimal" pattern="[0-9.,]*"></div>
+          <div class="hint">Mettre 0 si vide</div>
+        </div>
+        
+        <div class="guide-tag purple">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12" y2="18.01"/></svg>
+          Rapports → colonne "Carte bancaire"
+        </div>
+        <div class="field" style="margin-top:10px">
+          <label for="cb-appoint"><svg viewBox="0 0 20 14" fill="none" stroke="currentColor" stroke-width="1.5" style="width:18px;height:13px;vertical-align:middle;margin-right:4px"><rect x="1" y="1" width="18" height="12" rx="2"/><line x1="1" y1="5" x2="19" y2="5" stroke-width="2"/><rect x="3" y="8" width="4" height="2" rx="0.5" fill="currentColor" stroke="none"/></svg> Carte bancaire appoint <span style="font-weight:400;font-size:11px;color:var(--muted)">(optionnel)</span></label>
+          <div class="input-wrap"><span class="prefix">€</span><input type="number" id="cb-appoint" placeholder="0.00" step="0.01" min="0" inputmode="decimal" pattern="[0-9.,]*"></div>
+        </div>
+        <div class="divider"></div>
+        <div class="guide-tag purple">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2h12l2 4H4L6 2z"/><rect x="3" y="6" width="18" height="16" rx="2"/></svg>
+          Ticket télécollectes TPE appoint
+        </div>
+        <div class="field" style="margin-top:10px">
+          <label for="tpe2">Télécollectes TPE appoint <span style="font-weight:400;font-size:11px;color:var(--muted)">(optionnel)</span></label>
+          <div class="input-wrap"><span class="prefix">€</span><input type="number" id="tpe2" placeholder="0.00" step="0.01" min="0" inputmode="decimal" pattern="[0-9.,]*"></div>
+          <div class="hint">Mettre 0 si absent</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Commentaire -->
+    <div class="card">
+      <div class="card-header"><div class="dot dot-grey"></div><span>Commentaire <span style="font-weight:400;text-transform:none;letter-spacing:0">(optionnel)</span></span></div>
+      <div class="card-body">
+        <textarea id="comment" rows="3" placeholder="Anomalie, coupure TPE, problème de rendu…"></textarea>
+      </div>
+    </div>
+
+  </div>
+
+  <button class="fab" id="submitBtn" onclick="submit()">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
+    Valider la saisie
+  </button>
+</div>
+
+<!-- Écran succès -->
+<div id="successScreen" class="screen">
+  <div class="success-screen">
+    <div class="success-icon">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
+    </div>
+    <div class="success-title">Saisie enregistrée</div>
+    <div class="success-sub" id="successMsg">Données envoyées dans le tableau de bord.</div>
+    <button class="btn-new" onclick="reset()">Nouvelle saisie</button>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ─── CONFIG — À REMPLACER par ton URL Apps Script ───────────────────────────
+const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbw_SWTSgxmD0sL1SMdfWrK1iDI0ovLFQRWYVdcjaoCVvpd1BeZshMI-h4gPHMIURfXafg/exec';
+// ────────────────────────────────────────────────────────────────────────────
+
+const today = new Date();
+document.getElementById('date').value = today.toISOString().split('T')[0];
+
+function v(id) {
+  const n = parseFloat(document.getElementById(id).value);
+  return isNaN(n) ? 0 : n;
+}
+function req(id) {
+  const el = document.getElementById(id);
+  return el.value !== '' && el.value !== null;
+}
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3000);
+}
+
+async function submit() {
+  const date = document.getElementById('date').value;
+  const boutique = document.getElementById('boutique').value;
+  const vendeur = document.getElementById('vendeur').value;
+
+  if (!date || !boutique || !vendeur) {
+    showToast('Date, boutique et prénom sont obligatoires.');
+    return;
+  }
+  const reqFields = ['p-fond-init','p-fond-fin','cash','cb-total','tpe1'];
+  for (const id of reqFields) {
+    if (document.getElementById(id).value === '') {
+      showToast('Merci de remplir tous les champs (mettre 0 si vide).');
+      return;
+    }
+  }
+
+  const btn = document.getElementById('submitBtn');
+  btn.classList.add('loading');
+  btn.innerHTML = '<div class="spinner"></div>';
+
+  const payload = {
+    date, boutique, vendeur,
+    p_fond_init: v('p-fond-init'),
+    p_apport: v('p-apport'),
+    p_retrait: v('p-retrait'),
+    p_fond_fin: v('p-fond-fin'),
+    cash: v('cash'),
+    cb_total: v('cb-total'),
+    tpe1: v('tpe1'),
+    ewallet: v('ewallet'),
+    cb_appoint: v('cb-appoint'),
+    tpe2: v('tpe2'),
+    comment: document.getElementById('comment').value || ''
+  };
+
+  try {
+    // FormData + no-cors : seule combinaison fiable avec Apps Script depuis domaine externe
+    const form = new FormData();
+    form.append('data', JSON.stringify(payload));
+
+    await fetch(APPS_SCRIPT_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      body: form
+    });
+
+    // no-cors ne retourne pas de réponse lisible — on considère que c'est ok si pas d'exception
+    document.getElementById('successMsg').textContent =
+      boutique + ' — ' + date + ' — Données envoyées dans le tableau de bord.';
+    document.getElementById('formScreen').classList.remove('active');
+    document.getElementById('successScreen').classList.add('active');
+  } catch (err) {
+    showToast('Erreur réseau. Vérifie ta connexion et réessaie.');
+    btn.classList.remove('loading');
+    btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>Valider la saisie';
+  }
+}
+
+function reset() {
+  document.getElementById('successScreen').classList.remove('active');
+  document.getElementById('formScreen').classList.add('active');
+  document.getElementById('submitBtn').classList.remove('loading');
+  document.getElementById('submitBtn').innerHTML =
+    '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>Valider la saisie';
+  ['p-fond-init','p-apport','p-retrait','p-fond-fin','cash','tpe1',
+  'ewallet','tpe2','comment'].forEach(id => {
+    document.getElementById(id).value = '';
+  });
+  const today = new Date();
+  document.getElementById('date').value = today.toISOString().split('T')[0];
+}
+</script>
+</body>
+</html>
